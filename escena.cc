@@ -19,7 +19,7 @@ Escena::Escena()
    ejes.changeAxisSize( 5000 );
 
    // crear los objetos de la escena....
-   cubo = new Cubo(30);
+   cubo = new Cubo(50);
    tetraedro = new Tetraedro();
 }
 
@@ -55,6 +55,9 @@ void Escena::dibujar()
 {
    // Habilitar que solo colorea una cara
    glEnable(GL_CULL_FACE);
+   
+   // Colorea un triangulo del color de su último vértice
+   glShadeModel(GL_FLAT);
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
@@ -64,11 +67,36 @@ void Escena::dibujar()
    // Habrá que tener en esta primera práctica una variable que indique qué objeto se ha de visualizar
    // y hacer 
 
-   if(modoObjeto == CUBO)
-      cubo->draw();
-   if(modoObjeto == TETRAEDRO)
-      tetraedro->draw();
-    
+   if(visSolido)
+   {
+      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+      if(modoObjeto == CUBO)
+         cubo->draw(inmediato, visAjedrez);
+      if(modoObjeto == TETRAEDRO)
+         tetraedro->draw(inmediato, visAjedrez);
+   }
+   glPointSize(4);
+   if(visPuntos)
+   {
+      glDisable(GL_CULL_FACE);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+
+      if(modoObjeto == CUBO)
+         cubo->draw(inmediato, visAjedrez);
+      if(modoObjeto == TETRAEDRO)
+         tetraedro->draw(inmediato, visAjedrez);
+   }
+   if(visLineas)
+   {
+      glDisable(GL_CULL_FACE);
+      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+      if(modoObjeto == CUBO)
+         cubo->draw(inmediato, visAjedrez);
+      if(modoObjeto == TETRAEDRO)
+         tetraedro->draw(inmediato, visAjedrez);
+   }
 }
 
 //**************************************************************************
@@ -121,16 +149,41 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
       case '1' :
          if(modoMenu == SELDIBUJADO)
          {
-            modoDibujado = INMEDIATO;
+            inmediato = false;
          }
          break;
       case '2' :
          if(modoMenu == SELDIBUJADO)
          {
-            modoDibujado = DIFERIDO;
+            inmediato = true;
+         }
+         break;
+      case 'P' :
+         if(modoMenu == SELVISUALIZACION)
+         {
+            visPuntos ? visPuntos = false : visPuntos = true;
+         }
+         break;
+      case 'L' :
+         if(modoMenu == SELVISUALIZACION)
+         {
+            visLineas ? visLineas = false : visLineas = true;
+         }
+         break;
+      case 'S' :
+         if(modoMenu == SELVISUALIZACION)
+         {
+            visSolido ? visSolido = false : visSolido = true;
+         }
+         break;
+      case 'A' :
+         if(modoMenu == SELVISUALIZACION)
+         {
+            visAjedrez ? visAjedrez = false : visAjedrez = true;
          }
          break;
    }
+   // glutPostRedisplay();
    return salir;
 }
 //**************************************************************************

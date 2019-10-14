@@ -36,7 +36,11 @@ class Escena
 
    menu modoMenu = NADA;
    menuObjeto modoObjeto = NINGUN;
-   menuDibujado modoDibujado = INMEDIATO;
+   bool inmediato = false,
+        visPuntos = false,
+        visLineas = false,
+        visSolido = true,
+        visAjedrez = false;
    // Objetos de la escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
