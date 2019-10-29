@@ -37,6 +37,7 @@
 #endif
 
 #include "tuplasg.h" // tipos: Tupla3f, Tupla2f, Tupla3d, etc.........
+using namespace std;
 
 
 #endif // AUX_H_INCLUDED

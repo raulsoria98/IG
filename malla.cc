@@ -61,14 +61,14 @@ void Malla3D::draw_ModoDiferido()
 // Función de visualización de la malla,
 // puede llamar a  draw_ModoInmediato o bien a draw_ModoDiferido
 
-void Malla3D::draw(bool inmediato, bool visAjedrez)
+void Malla3D::draw(const vector<Tupla3f> & colores, bool inmediato, bool visAjedrez)
 {
    if(visAjedrez)
    {
       c.clear();
 
-      Tupla3f ca1(0,255,0);
-      Tupla3f ca2(200,0,200);
+      Tupla3f ca1(0.5,0,1);
+      Tupla3f ca2(1,1,0);
       for(int i = 0; i < v.size(); i++)
       {
          if(i % 2 == 0)
@@ -81,30 +81,12 @@ void Malla3D::draw(bool inmediato, bool visAjedrez)
    {
       c.clear();
 
-      std::vector<Tupla3f> colores;
-      Tupla3f c0(0,255,0);
-      Tupla3f c1(0,255,255);
-      Tupla3f c2(255,0,255);
-      Tupla3f c3(255,255,0);
-      Tupla3f c4(255,0,0);
-      Tupla3f c5(0,0,0);
-      Tupla3f c6(0,0,255);
-      Tupla3f c7(255,255,255);
-      colores.push_back(c0);
-      colores.push_back(c1);
-      colores.push_back(c2);
-      colores.push_back(c3);
-      colores.push_back(c4);
-      colores.push_back(c5);
-      colores.push_back(c6);
-      colores.push_back(c7);
-
       for(int i = 0; i < v.size(); i++)
       {
          c.push_back(colores[i%colores.size()]);
       }
    }
-   std::cout << visAjedrez;
+
    if(!inmediato)
       this->draw_ModoDiferido();
    else

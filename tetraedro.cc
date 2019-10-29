@@ -1,7 +1,6 @@
 #include "aux.h"
 #include "malla.h"
 #include "tetraedro.h"
-#include "math.h"
 
 Tetraedro::Tetraedro()
 {

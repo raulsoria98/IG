@@ -62,7 +62,7 @@ class TuplaG
    inline TuplaG( const T * org ) ;
 
    // acceso de lectura/escritura a un elemento (v[i]=x, x=v[i])
-   //T & operator [] (const unsigned i) ;
+   T & operator [] (const unsigned i) ;
 
    // acceso de solo lectura a un elemento ( x=v(i) )
    const T & operator () (const unsigned i) const ;
@@ -231,12 +231,12 @@ TuplaG<T,n>::TuplaG( const T * org )
 
 //----------------------------------------------------------------------
 
-//template< class T, unsigned n >
-//T & TuplaG<T,n>::operator [] (const unsigned i)
-//{
-   //assert( i < n ) ;
-   //return coo[i] ;
-//}
+template< class T, unsigned n >
+T & TuplaG<T,n>::operator [] (const unsigned i)
+{
+   assert( i < n ) ;
+   return coo[i] ;
+}
 
 //----------------------------------------------------------------------
 
