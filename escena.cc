@@ -19,18 +19,13 @@ Escena::Escena()
    ejes.changeAxisSize( 5000 );
 
    // crear los objetos de la escena....
-   cubo = new Cubo(50);
-   tetraedro = new Tetraedro();
-   peon = new ObjPLY("./plys/ant.ply");
+   dodge = new ObjPLY("./plys/big_dodge.ply");
 
-   Tupla3f v1(30,30,0);
-   Tupla3f v2(30,0,0);
-   // Tupla3f v3(0,30,0);
-   std::vector<Tupla3f> cilindro;
-   cilindro.push_back(v1);
-   cilindro.push_back(v2);
-   // cilindro.push_back(v3);
-   revo = new ObjRevolucion(cilindro, 16,true,true);
+   peon = new ObjRevolucion("./plys/peon.ply", 16);
+
+   cilindro = new Cilindro(50, 50);
+   cono = new Cono(50,50);
+   esfera = new Esfera(50,50,50);
 }
 
 //**************************************************************************
@@ -78,34 +73,49 @@ void Escena::dibujar()
    // y hacer 
    
    vector<Tupla3f> colores;
-      Tupla3f c0(0,1,0);
-      Tupla3f c1(0,1,1);
-      Tupla3f c2(1,0,1);
-      Tupla3f c3(1,1,0);
+      Tupla3f c0(0,0,0);
+      Tupla3f c1(0,0,1);
+      Tupla3f c2(0,1,0);
+      Tupla3f c3(0,1,1);
       Tupla3f c4(1,0,0);
-      Tupla3f c5(0,0,0);
-      Tupla3f c6(0,0,1);
+      Tupla3f c5(1,0,1);
+      Tupla3f c6(1,1,0);
       Tupla3f c7(1,1,1);
-      colores.push_back(c0);
-      colores.push_back(c0);
-      colores.push_back(c0);
-      colores.push_back(c0);
-      colores.push_back(c0);
-      colores.push_back(c0);
-      colores.push_back(c0);
-      colores.push_back(c0);
-
+      // colores.push_back(c0);
+      // colores.push_back(c1);
+      // colores.push_back(c2);
+      // colores.push_back(c3);
+      // colores.push_back(c4);
+      colores.push_back(c5);
+      // colores.push_back(c6);
+      // colores.push_back(c7);
+   
    if(visSolido)
    {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-      /* if(modoObjeto == CUBO)
-         cubo->draw(inmediato, visAjedrez);
-      if(modoObjeto == TETRAEDRO)
-         tetraedro->draw(inmediato, visAjedrez); */
-      
-      // peon->draw(inmediato, visAjedrez);
-      revo->draw(colores, inmediato, visAjedrez);
+      glPushMatrix();
+         glTranslatef(100,50,0);
+         esfera->draw(colores, inmediato, visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glScalef(0.5,0.5,0.5);
+         cilindro->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(-100,0,0);
+         cono->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(0,1.4*30,-100);
+         glScalef(30,30,30);
+         peon->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(0,3.22544*6,100);
+         glScalef(6,6,6);
+         dodge->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
    }
    glPointSize(4);
    if(visPuntos)
@@ -113,26 +123,56 @@ void Escena::dibujar()
       glDisable(GL_CULL_FACE);
       glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
-      /* if(modoObjeto == CUBO)
-         cubo->draw(inmediato, visAjedrez);
-      if(modoObjeto == TETRAEDRO)
-         tetraedro->draw(inmediato, visAjedrez); */
-      
-      // peon->draw(inmediato, visAjedrez);
-      revo->draw(colores, inmediato, visAjedrez);
+      glPushMatrix();
+         glTranslatef(100,50,0);
+         esfera->draw(colores, inmediato, visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glScalef(0.5,0.5,0.5);
+         cilindro->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(-100,0,0);
+         cono->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(0,1.4*30,-100);
+         glScalef(30,30,30);
+         peon->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(0,3.22544*6,100);
+         glScalef(6,6,6);
+         dodge->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
    }
    if(visLineas)
    {
       glDisable(GL_CULL_FACE);
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-      /* if(modoObjeto == CUBO)
-         cubo->draw(inmediato, visAjedrez);
-      if(modoObjeto == TETRAEDRO)
-         tetraedro->draw(inmediato, visAjedrez); */
-      
-      // peon->draw(inmediato, visAjedrez);
-      revo->draw(colores, inmediato, visAjedrez);
+      glPushMatrix();
+         glTranslatef(100,50,0);
+         esfera->draw(colores, inmediato, visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glScalef(0.5,0.5,0.5);
+         cilindro->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(-100,0,0);
+         cono->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(0,1.4*30,-100);
+         glScalef(30,30,30);
+         peon->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(0,3.22544*6,100);
+         glScalef(6,6,6);
+         dodge->draw(colores,inmediato,visAjedrez);
+      glPopMatrix();
    }
 }
 

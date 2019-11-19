@@ -8,6 +8,9 @@
 #include "objply.h"
 #include "objrevolucion.h"
 #include "ply_reader.h"
+#include "cilindro.h"
+#include "cono.h"
+#include "esfera.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 typedef enum {NINGUN, CUBO, TETRAEDRO} menuObjeto;
@@ -48,8 +51,11 @@ class Escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
    Tetraedro * tetraedro = nullptr ; // es importante inicializarlo a 'nullptr'
-   ObjPLY * peon = nullptr;
-   ObjRevolucion * revo = nullptr;
+   ObjPLY * dodge = nullptr;
+   ObjRevolucion * peon = nullptr;
+   Cilindro * cilindro = nullptr;
+   Cono * cono = nullptr;
+   Esfera * esfera = nullptr;
 
    
    public:

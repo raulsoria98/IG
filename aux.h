@@ -37,7 +37,9 @@
 #endif
 
 #include "tuplasg.h" // tipos: Tupla3f, Tupla2f, Tupla3d, etc.........
+#include "ply_reader.h"
 using namespace std;
+#include <algorithm> // std::reverse
 
 
 #endif // AUX_H_INCLUDED
