@@ -11,10 +11,14 @@
 #include "cilindro.h"
 #include "cono.h"
 #include "esfera.h"
+#include "luz.h"
+#include "luzPosicional.h"
+#include "luzDireccional.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 typedef enum {NINGUN, CUBO, TETRAEDRO} menuObjeto;
 typedef enum {INMEDIATO, DIFERIDO} menuDibujado;
+typedef enum {ALPHA, BETA} Angulos;
 class Escena
 {
 
@@ -42,11 +46,16 @@ class Escena
 
    menu modoMenu = NADA;
    menuObjeto modoObjeto = NINGUN;
+   
+   Angulos ultimoAngulo = ALPHA;
+    int alpha = 0, beta = 0;
+
    bool inmediato = false,
         visPuntos = false,
         visLineas = false,
         visSolido = true,
-        visAjedrez = false;
+        visAjedrez = false,
+        visIluminacion = false;
    // Objetos de la escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'

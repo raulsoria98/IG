@@ -39,9 +39,13 @@ void Ejes::createArrayData()
 
 void Ejes::draw()
 {
+	glDisable(GL_LIGHTING);
+	
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vertexArray );
 	glEnableClientState(GL_COLOR_ARRAY);
 	glColorPointer(3, GL_FLOAT, 0, colorArray );
 	glDrawArrays( GL_LINES, 0, 6 ) ;
+
+	glEnable(GL_LIGHTING);
 }

@@ -23,6 +23,7 @@ ObjRevolucion::ObjRevolucion(const std::string & archivo, int num_instancias, bo
    this->tapa_inf = tapa_inf;
    this->tapa_sup = tapa_sup;
    this->crearMalla(perfil, num_instancias);
+   this->calcular_normales();
 }
 
 // *****************************************************************************
@@ -34,6 +35,7 @@ ObjRevolucion::ObjRevolucion(std::vector<Tupla3f> perfil, int num_instancias, bo
    this->tapa_inf = tapa_inf;
    this->tapa_sup = tapa_sup;
    this->crearMalla(perfil, num_instancias);
+   this->calcular_normales();
 }
 
 void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_instancias) {

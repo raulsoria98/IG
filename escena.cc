@@ -21,11 +21,21 @@ Escena::Escena()
    // crear los objetos de la escena....
    dodge = new ObjPLY("./plys/big_dodge.ply");
 
-   peon = new ObjRevolucion("./plys/peon.ply", 16);
+   peon = new ObjRevolucion("./plys/peon.ply", 50);
 
    cilindro = new Cilindro(50, 50);
    cono = new Cono(50,50);
    esfera = new Esfera(50,50,50);
+
+   Material morado(Tupla4f(0.5,0,1,1),Tupla4f(0.25,0,0.5,1),Tupla4f(0.1,0.005,0.05,1),128);
+   Material azul(Tupla4f(0,0,1,1),Tupla4f(0.05,0,0.7,1),Tupla4f(0.05,0.005,0.5,1),128);
+   Material verde(Tupla4f(0,1,0,1),Tupla4f(0.05,0.7,0,1),Tupla4f(0.05,0.5,0.005,1),128);
+   
+   peon->setMaterial(morado);
+   cono->setMaterial(verde);
+   dodge->setMaterial(morado);
+   esfera->setMaterial(azul);
+   cilindro->setMaterial(azul);
 }
 
 //**************************************************************************
@@ -58,11 +68,27 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::dibujar()
 {
+
+   LuzDireccional luz0(Tupla2f(STOR(alpha),STOR(beta)));
+   luz0.setId(GL_LIGHT0);
+   luz0.setDifuso(Tupla4f(0.8,0,0.4,1));
+   luz0.setEspecular(Tupla4f(0.5,0.5,0.5,1));
+   luz0.setAmbiente(Tupla4f(0.8,0.1,0.4,1));
+
+   LuzPosicional luz1(Tupla3f(0,100,0));
+   luz1.setId(GL_LIGHT1);
+   luz1.setDifuso(Tupla4f(1,1,1,1));
+
+
    // Habilitar que solo colorea una cara
    glEnable(GL_CULL_FACE);
    
+   // Evita alteraciones en el tamaño de las normales
+   glEnable(GL_NORMALIZE);
+   
    // Colorea un triangulo del color de su último vértice
-   glShadeModel(GL_FLAT);
+   // glShadeModel(GL_FLAT);
+   glShadeModel(GL_SMOOTH);
 
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // Limpiar la pantalla
 	change_observer();
@@ -94,84 +120,93 @@ void Escena::dibujar()
    {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+      luz0.activar();
+      luz1.activar();
       glPushMatrix();
          glTranslatef(100,50,0);
-         esfera->draw(colores, inmediato, visAjedrez);
+         esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
+         glTranslatef(0,0,-100);
          glScalef(0.5,0.5,0.5);
-         cilindro->draw(colores,inmediato,visAjedrez);
+         cilindro->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
          glTranslatef(-100,0,0);
-         cono->draw(colores,inmediato,visAjedrez);
+         cono->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
-         glTranslatef(0,1.4*30,-100);
+         glTranslatef(0,1.4*30,0);
          glScalef(30,30,30);
-         peon->draw(colores,inmediato,visAjedrez);
+         peon->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
          glTranslatef(0,3.22544*6,100);
          glScalef(6,6,6);
-         dodge->draw(colores,inmediato,visAjedrez);
+         dodge->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
    }
    glPointSize(4);
    if(visPuntos)
    {
+      luz0.activar();
+      luz1.activar();
       glDisable(GL_CULL_FACE);
       glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
 
       glPushMatrix();
          glTranslatef(100,50,0);
-         esfera->draw(colores, inmediato, visAjedrez);
+         esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
+         glTranslatef(0,0,-100);
          glScalef(0.5,0.5,0.5);
-         cilindro->draw(colores,inmediato,visAjedrez);
+         cilindro->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
          glTranslatef(-100,0,0);
-         cono->draw(colores,inmediato,visAjedrez);
+         cono->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
-         glTranslatef(0,1.4*30,-100);
+         glTranslatef(0,1.4*30,0);
          glScalef(30,30,30);
-         peon->draw(colores,inmediato,visAjedrez);
+         peon->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
          glTranslatef(0,3.22544*6,100);
          glScalef(6,6,6);
-         dodge->draw(colores,inmediato,visAjedrez);
+         dodge->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
    }
    if(visLineas)
    {
+      luz0.activar();
+      luz1.activar();
       glDisable(GL_CULL_FACE);
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
       glPushMatrix();
          glTranslatef(100,50,0);
-         esfera->draw(colores, inmediato, visAjedrez);
+         esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
+         glTranslatef(0,0,-100);
          glScalef(0.5,0.5,0.5);
-         cilindro->draw(colores,inmediato,visAjedrez);
+         cilindro->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
          glTranslatef(-100,0,0);
-         cono->draw(colores,inmediato,visAjedrez);
+         cono->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
-         glTranslatef(0,1.4*30,-100);
+         glTranslatef(0,1.4*30,0);
          glScalef(30,30,30);
-         peon->draw(colores,inmediato,visAjedrez);
+         peon->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
       glPushMatrix();
          glTranslatef(0,3.22544*6,100);
          glScalef(6,6,6);
-         dodge->draw(colores,inmediato,visAjedrez);
+         dodge->draw(colores,inmediato,visAjedrez, visIluminacion);
       glPopMatrix();
    }
 }
@@ -223,18 +258,6 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             modoObjeto = TETRAEDRO;
          }
          break;
-      case '1' :
-         if(modoMenu == SELDIBUJADO)
-         {
-            inmediato = false;
-         }
-         break;
-      case '2' :
-         if(modoMenu == SELDIBUJADO)
-         {
-            inmediato = true;
-         }
-         break;
       case 'P' :
          if(modoMenu == SELVISUALIZACION)
          {
@@ -258,6 +281,75 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          {
             visAjedrez ? visAjedrez = false : visAjedrez = true;
          }
+         else
+            ultimoAngulo = ALPHA;
+         break;
+      case 'B' :
+         ultimoAngulo = BETA;
+         break;
+      case 'I' :
+         if(modoMenu == SELVISUALIZACION)
+         {
+            visIluminacion ? visIluminacion = false : visIluminacion = true;
+         }
+         break;
+      case '0' :
+            glIsEnabled(GL_LIGHT0) ? glDisable(GL_LIGHT0) : glEnable(GL_LIGHT0);
+         break;
+      case '1' :
+         if(modoMenu == SELDIBUJADO)
+         {
+            inmediato = false;
+         }
+         else
+            glIsEnabled(GL_LIGHT1) ? glDisable(GL_LIGHT1) : glEnable(GL_LIGHT1);
+         break;
+      case '2' :
+         if(modoMenu == SELDIBUJADO)
+         {
+            inmediato = true;
+         }
+         else
+            glIsEnabled(GL_LIGHT2) ? glDisable(GL_LIGHT2) : glEnable(GL_LIGHT2);
+         break;
+      case '3' :
+            glIsEnabled(GL_LIGHT3) ? glDisable(GL_LIGHT3) : glEnable(GL_LIGHT3);
+         break;
+      case '4' :
+            glIsEnabled(GL_LIGHT4) ? glDisable(GL_LIGHT4) : glEnable(GL_LIGHT4);
+         break;
+      case '5' :
+            glIsEnabled(GL_LIGHT5) ? glDisable(GL_LIGHT5) : glEnable(GL_LIGHT5);
+         break;
+      case '6' :
+            glIsEnabled(GL_LIGHT6) ? glDisable(GL_LIGHT6) : glEnable(GL_LIGHT6);
+         break;
+      case '7' :
+            glIsEnabled(GL_LIGHT7) ? glDisable(GL_LIGHT7) : glEnable(GL_LIGHT7);
+         break;
+      case '>' :
+            if(ultimoAngulo == ALPHA)
+            {
+               alpha = (alpha + 10)%360;
+               cout << "Nuevo alpha: " << alpha << endl;
+            }
+            else if(ultimoAngulo == BETA)
+            {
+               beta = (beta + 10)%360;
+               cout << "Nuevo beta: " << beta << endl;
+            }
+         break;
+      case '<' :
+            if(ultimoAngulo == ALPHA)
+            {
+               alpha = (alpha - 10)%360;
+               cout << "Nuevo alpha: " << alpha << endl;
+            }
+            else if(ultimoAngulo == BETA)
+            {
+               beta = (beta - 10)%360;
+               cout << "Nuevo beta: " << beta << endl;
+            }
          break;
    }
    // glutPostRedisplay();
