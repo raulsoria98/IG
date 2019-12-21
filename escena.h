@@ -14,11 +14,13 @@
 #include "luz.h"
 #include "luzPosicional.h"
 #include "luzDireccional.h"
+#include "carrusel.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
-typedef enum {NINGUN, CUBO, TETRAEDRO} menuObjeto;
 typedef enum {INMEDIATO, DIFERIDO} menuDibujado;
 typedef enum {ALPHA, BETA} Angulos;
+typedef enum {NINGUN, GRADOS_LIBERTAD, JERARQUICO} sub_menu;
+typedef enum {CABALLOS, SUBEBAJA, ROTACION} grados_libertad;
 class Escena
 {
 
@@ -45,17 +47,18 @@ class Escena
    void clear_window();
 
    menu modoMenu = NADA;
-   menuObjeto modoObjeto = NINGUN;
+   sub_menu subMenu = NINGUN;
+   grados_libertad grados = ROTACION;
    
    Angulos ultimoAngulo = ALPHA;
-    int alpha = 0, beta = 0;
 
    bool inmediato = false,
         visPuntos = false,
         visLineas = false,
         visSolido = true,
         visAjedrez = false,
-        visIluminacion = false;
+        visIluminacion = false,
+        girar = false;
    // Objetos de la escena
    Ejes ejes;
    Cubo * cubo = nullptr ; // es importante inicializarlo a 'nullptr'
@@ -65,7 +68,14 @@ class Escena
    Cilindro * cilindro = nullptr;
    Cono * cono = nullptr;
    Esfera * esfera = nullptr;
+   Caballo * caballo = nullptr;
+   Columpio * columpio = nullptr;
+   Giratorio * giratorio = nullptr;
+   Carrusel * carrusel = nullptr;
+   LuzDireccional * luz0 = nullptr;
+   LuzPosicional * luz1 = nullptr;
 
+    float velocidadRotacion, velocidadCaballo, velocidadSubebaja;
    
    public:
 
@@ -79,6 +89,8 @@ class Escena
 	// Interacción con la escena
 	bool teclaPulsada( unsigned char Tecla1, int x, int y ) ;
 	void teclaEspecial( int Tecla1, int x, int y );
+
+    void girarCarrusel();
 
 };
 #endif

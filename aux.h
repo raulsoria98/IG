@@ -40,7 +40,8 @@
 #include "ply_reader.h"
 using namespace std;
 #include <algorithm> // std::reverse
-#define STOR(N) N*M_PI/180
+#define STOR(N) N*M_PI/180.0
+#define RTOS(N) N*180/M_PI
 
 
 #endif // AUX_H_INCLUDED

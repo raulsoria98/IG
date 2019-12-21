@@ -171,4 +171,5 @@ void ObjRevolucion::crearMalla(std::vector<Tupla3f> perfil_original, int num_ins
          f.push_back(nuevaCara);
       }
    }
+   this->calcular_normales();
 }

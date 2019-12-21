@@ -52,5 +52,7 @@ Cubo::Cubo(float lado)
    f.push_back(f9);
    f.push_back(f10);
    f.push_back(f11);
+
+   this->calcular_normales();
 }
 

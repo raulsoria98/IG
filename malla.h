@@ -38,6 +38,9 @@ class Malla3D
 
    inline void setMaterial(Material mat) { m = mat; };
 
+   inline vector<Tupla3f> get_v() { return v; };
+   inline vector<Tupla3i> get_f() { return f; };
+
    protected:
 
 

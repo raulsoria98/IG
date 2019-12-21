@@ -13,16 +13,20 @@ LuzDireccional::LuzDireccional(const Tupla2f & orientacion)
 
 void LuzDireccional::variarAnguloAlpha(float incremento)
 {
-    alpha += incremento;
+    cout << "Incremento de alpha: " << incremento << endl;
+    alpha = STOR( (int)(RTOS(alpha) + incremento)%360 );
+    cout << "Nuevo alpha: " << RTOS(alpha) << endl;
 
     posicion(0) = sin(alpha);
-    posicion(2) = sin(alpha)*cos(beta);
+    posicion(2) = cos(alpha)*cos(beta);
 }
 
 void LuzDireccional::variarAnguloBeta(float incremento)
 {
-    beta += incremento;
+    cout << "Incremento de beta: " << incremento << endl;
+    beta = STOR( (int)(RTOS(beta) + incremento)%360 );
+    cout << "Nuevo beta: " << RTOS(beta) << endl;
     
     posicion(1) = sin(beta);
-    posicion(2) = sin(alpha)*cos(beta);
+    posicion(2) = cos(alpha)*cos(beta);
 }

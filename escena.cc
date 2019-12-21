@@ -26,16 +26,31 @@ Escena::Escena()
    cilindro = new Cilindro(50, 50);
    cono = new Cono(50,50);
    esfera = new Esfera(50,50,50);
+   cubo = new Cubo(50);
+   caballo = new Caballo();
+   columpio = new Columpio(true);
+   giratorio = new Giratorio();
+   carrusel = new Carrusel();
 
-   Material morado(Tupla4f(0.5,0,1,1),Tupla4f(0.25,0,0.5,1),Tupla4f(0.1,0.005,0.05,1),128);
+   // LUCES
+   luz0 = new LuzDireccional(Tupla2f(0,0));
+   luz0->setId(GL_LIGHT0);
+   luz1 = new LuzPosicional(Tupla3f(0,100,0));
+   luz1->setId(GL_LIGHT1);
+   luz1->setDifuso(Tupla4f(1,1,1,1));
+
+   Material morado(Tupla4f(0.5,0,0.5,1),Tupla4f(0.25,0,0.5,1),Tupla4f(0.1,0.005,0.05,1),128);
    Material azul(Tupla4f(0,0,1,1),Tupla4f(0.05,0,0.7,1),Tupla4f(0.05,0.005,0.5,1),128);
    Material verde(Tupla4f(0,1,0,1),Tupla4f(0.05,0.7,0,1),Tupla4f(0.05,0.5,0.005,1),128);
+   Material rojo(Tupla4f(1,0,0,1),Tupla4f(0.7,0.05,0,1),Tupla4f(0.5,0.05,0.005,1),128);
    
    peon->setMaterial(morado);
    cono->setMaterial(verde);
-   dodge->setMaterial(morado);
+   caballo->setMaterial(morado);
    esfera->setMaterial(azul);
-   cilindro->setMaterial(azul);
+   cubo->setMaterial(azul);
+
+   velocidadRotacion = velocidadCaballo = velocidadSubebaja = 0.2;
 }
 
 //**************************************************************************
@@ -57,7 +72,15 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 	glViewport( 0, 0, UI_window_width, UI_window_height );
 }
 
-
+void Escena::girarCarrusel()
+{
+   if(girar)
+   {
+      carrusel->cambiarRotacion(velocidadRotacion);
+      carrusel->moverCaballo(velocidadCaballo);
+      carrusel->cambiarAltura(velocidadSubebaja);
+   }
+}
 
 // **************************************************************************
 //
@@ -68,17 +91,10 @@ void Escena::inicializar( int UI_window_width, int UI_window_height )
 
 void Escena::dibujar()
 {
-
-   LuzDireccional luz0(Tupla2f(STOR(alpha),STOR(beta)));
-   luz0.setId(GL_LIGHT0);
-   luz0.setDifuso(Tupla4f(0.8,0,0.4,1));
-   luz0.setEspecular(Tupla4f(0.5,0.5,0.5,1));
-   luz0.setAmbiente(Tupla4f(0.8,0.1,0.4,1));
-
-   LuzPosicional luz1(Tupla3f(0,100,0));
-   luz1.setId(GL_LIGHT1);
-   luz1.setDifuso(Tupla4f(1,1,1,1));
-
+   // LuzDireccional luz0(Tupla2f(STOR(alpha),STOR(beta)));
+   // luz0.setDifuso(Tupla4f(0.8,0,0.4,1));
+   // luz0.setEspecular(Tupla4f(0.5,0.5,0.5,1));
+   // luz0.setAmbiente(Tupla4f(0.8,0.1,0.4,1));
 
    // Habilitar que solo colorea una cara
    glEnable(GL_CULL_FACE);
@@ -120,93 +136,112 @@ void Escena::dibujar()
    {
       glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-      luz0.activar();
-      luz1.activar();
+      luz0->activar();
+      luz1->activar();
+      
       glPushMatrix();
-         glTranslatef(100,50,0);
-         esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
+         carrusel->draw(colores,inmediato,visAjedrez,visIluminacion);
       glPopMatrix();
       glPushMatrix();
-         glTranslatef(0,0,-100);
-         glScalef(0.5,0.5,0.5);
-         cilindro->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(-100,0,0);
-         cono->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(0,1.4*30,0);
-         glScalef(30,30,30);
-         peon->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(0,3.22544*6,100);
-         glScalef(6,6,6);
-         dodge->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glTranslatef(0,0,-300);
+         glPushMatrix();
+            glTranslatef(100,50,0);
+            esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,25,-100);
+            cubo->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(-100,0,0);
+            cono->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,1.4*30,0);
+            glScalef(30,30,30);
+            peon->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,20*2.23,100);
+            glRotatef(-90,1,0,0);
+            glScalef(20,20,20);
+            caballo->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
       glPopMatrix();
    }
    glPointSize(4);
    if(visPuntos)
    {
-      luz0.activar();
-      luz1.activar();
       glDisable(GL_CULL_FACE);
       glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+      luz0->activar();
+      luz1->activar();
 
       glPushMatrix();
-         glTranslatef(100,50,0);
-         esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
+         carrusel->draw(colores,inmediato,visAjedrez,visIluminacion);
       glPopMatrix();
       glPushMatrix();
-         glTranslatef(0,0,-100);
-         glScalef(0.5,0.5,0.5);
-         cilindro->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(-100,0,0);
-         cono->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(0,1.4*30,0);
-         glScalef(30,30,30);
-         peon->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(0,3.22544*6,100);
-         glScalef(6,6,6);
-         dodge->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glTranslatef(0,0,-300);
+         glPushMatrix();
+            glTranslatef(100,50,0);
+            esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,25,-100);
+            cubo->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(-100,0,0);
+            cono->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,1.4*30,0);
+            glScalef(30,30,30);
+            peon->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,20*2.23,100);
+            glRotatef(-90,1,0,0);
+            glScalef(20,20,20);
+            caballo->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
       glPopMatrix();
    }
    if(visLineas)
    {
-      luz0.activar();
-      luz1.activar();
       glDisable(GL_CULL_FACE);
       glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      luz0->activar();
+      luz1->activar();
 
       glPushMatrix();
-         glTranslatef(100,50,0);
-         esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
+         carrusel->draw(colores,inmediato,visAjedrez,visIluminacion);
       glPopMatrix();
       glPushMatrix();
-         glTranslatef(0,0,-100);
-         glScalef(0.5,0.5,0.5);
-         cilindro->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(-100,0,0);
-         cono->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(0,1.4*30,0);
-         glScalef(30,30,30);
-         peon->draw(colores,inmediato,visAjedrez, visIluminacion);
-      glPopMatrix();
-      glPushMatrix();
-         glTranslatef(0,3.22544*6,100);
-         glScalef(6,6,6);
-         dodge->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glTranslatef(0,0,-300);
+         glPushMatrix();
+            glTranslatef(100,50,0);
+            esfera->draw(colores, inmediato, visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,25,-100);
+            cubo->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(-100,0,0);
+            cono->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,1.4*30,0);
+            glScalef(30,30,30);
+            peon->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
+         glPushMatrix();
+            glTranslatef(0,20*2.23,100);
+            glRotatef(-90,1,0,0);
+            glScalef(20,20,20);
+            caballo->draw(colores,inmediato,visAjedrez, visIluminacion);
+         glPopMatrix();
       glPopMatrix();
    }
 }
@@ -233,31 +268,18 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
             salir=true ;
          }
          break ;
-      case 'O' :
-         // ESTAMOS EN MODO SELECCION DE OBJETO
-         modoMenu=SELOBJETO; 
-         break ;
       case 'V' :
-         // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
-         modoMenu=SELVISUALIZACION;
+         if(modoMenu == SELVISUALIZACION)
+            subMenu == GRADOS_LIBERTAD ? subMenu = NINGUN : subMenu = GRADOS_LIBERTAD;
+         else
+            // ESTAMOS EN MODO SELECCION DE MODO DE VISUALIZACION
+            modoMenu=SELVISUALIZACION;
          break ;
       case 'D' :
          // ESTAMOS EN MODO SELECCION DE DIBUJADO
          modoMenu=SELDIBUJADO;
          break ;
          // COMPLETAR con los diferentes opciones de teclado
-      case 'C' :
-         if(modoMenu == SELOBJETO)
-         {
-            modoObjeto = CUBO;
-         }
-         break;
-      case 'T' :
-         if(modoMenu == SELOBJETO)
-         {
-            modoObjeto = TETRAEDRO;
-         }
-         break;
       case 'P' :
          if(modoMenu == SELVISUALIZACION)
          {
@@ -281,11 +303,12 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          {
             visAjedrez ? visAjedrez = false : visAjedrez = true;
          }
-         else
+         else if(visIluminacion)
             ultimoAngulo = ALPHA;
          break;
       case 'B' :
-         ultimoAngulo = BETA;
+         if(visIluminacion)
+            ultimoAngulo = BETA;
          break;
       case 'I' :
          if(modoMenu == SELVISUALIZACION)
@@ -294,6 +317,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          }
          break;
       case '0' :
+         if(subMenu == GRADOS_LIBERTAD && grados != ROTACION)
+            grados = ROTACION;
+         else if(visIluminacion)
             glIsEnabled(GL_LIGHT0) ? glDisable(GL_LIGHT0) : glEnable(GL_LIGHT0);
          break;
       case '1' :
@@ -301,7 +327,9 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          {
             inmediato = false;
          }
-         else
+         else if(subMenu == GRADOS_LIBERTAD && grados != CABALLOS)
+            grados = CABALLOS;
+         else if(visIluminacion)
             glIsEnabled(GL_LIGHT1) ? glDisable(GL_LIGHT1) : glEnable(GL_LIGHT1);
          break;
       case '2' :
@@ -309,47 +337,97 @@ bool Escena::teclaPulsada( unsigned char tecla, int x, int y )
          {
             inmediato = true;
          }
-         else
+         else if(subMenu == GRADOS_LIBERTAD && grados != SUBEBAJA)
+            grados = SUBEBAJA;
+         else if(visIluminacion)
             glIsEnabled(GL_LIGHT2) ? glDisable(GL_LIGHT2) : glEnable(GL_LIGHT2);
          break;
       case '3' :
+         if(visIluminacion)
             glIsEnabled(GL_LIGHT3) ? glDisable(GL_LIGHT3) : glEnable(GL_LIGHT3);
          break;
       case '4' :
+         if(visIluminacion)
             glIsEnabled(GL_LIGHT4) ? glDisable(GL_LIGHT4) : glEnable(GL_LIGHT4);
          break;
       case '5' :
+         if(visIluminacion)
             glIsEnabled(GL_LIGHT5) ? glDisable(GL_LIGHT5) : glEnable(GL_LIGHT5);
          break;
       case '6' :
+         if(visIluminacion)
             glIsEnabled(GL_LIGHT6) ? glDisable(GL_LIGHT6) : glEnable(GL_LIGHT6);
          break;
       case '7' :
+         if(visIluminacion)
             glIsEnabled(GL_LIGHT7) ? glDisable(GL_LIGHT7) : glEnable(GL_LIGHT7);
          break;
       case '>' :
+         if(visIluminacion)
+         {
             if(ultimoAngulo == ALPHA)
             {
-               alpha = (alpha + 10)%360;
-               cout << "Nuevo alpha: " << alpha << endl;
+               luz0->variarAnguloAlpha(10);
             }
             else if(ultimoAngulo == BETA)
             {
-               beta = (beta + 10)%360;
-               cout << "Nuevo beta: " << beta << endl;
+               luz0->variarAnguloBeta(10);
             }
+         }
          break;
       case '<' :
+         if(visIluminacion)
+         {
             if(ultimoAngulo == ALPHA)
             {
-               alpha = (alpha - 10)%360;
-               cout << "Nuevo alpha: " << alpha << endl;
+               luz0->variarAnguloAlpha(-10);
             }
             else if(ultimoAngulo == BETA)
             {
-               beta = (beta - 10)%360;
-               cout << "Nuevo beta: " << beta << endl;
+               luz0->variarAnguloBeta(-10);
             }
+         }
+         break;
+      case '+' :
+            if(subMenu == JERARQUICO)
+            {
+               velocidadRotacion += 0.2;
+               velocidadCaballo += 0.2;
+               velocidadSubebaja += 0.2;
+            }
+            else if(subMenu == GRADOS_LIBERTAD)
+            {
+               if(grados == ROTACION)
+                  velocidadRotacion += 0.2;
+               else if(grados == CABALLOS)
+                  velocidadCaballo += 0.2;
+               else if(grados == SUBEBAJA)
+                  velocidadSubebaja += 0.2;
+            }
+         break;
+      case '-' :
+            if(subMenu == JERARQUICO)
+            {
+               velocidadRotacion -= 0.2;
+               velocidadCaballo -= 0.2;
+               velocidadSubebaja -= 0.2;
+            }
+            else if(subMenu == GRADOS_LIBERTAD)
+            {
+               if(grados == ROTACION)
+                  velocidadRotacion -= 0.2;
+               else if(grados == CABALLOS)
+                  velocidadCaballo -= 0.2;
+               else if(grados == SUBEBAJA)
+                  velocidadSubebaja -= 0.2;
+            }
+         break;
+      case 'J' :
+         if(modoMenu == SELVISUALIZACION)
+         {
+            girar ? girar = false : girar = true;
+            subMenu == JERARQUICO ? subMenu = NINGUN : subMenu = JERARQUICO;
+         }
          break;
    }
    // glutPostRedisplay();
