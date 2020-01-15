@@ -28,16 +28,15 @@ Escena::Escena()
    esfera = new Esfera(50,50,50);
    cubo = new Cubo(50);
    caballo = new Caballo();
-   columpio = new Columpio(true);
-   giratorio = new Giratorio();
    carrusel = new Carrusel();
+   cuadro = new Cuadro();
 
    // LUCES
    luz0 = new LuzDireccional(Tupla2f(0,0));
    luz0->setId(GL_LIGHT0);
+   luz0->variarAnguloAlpha(-55);
    luz1 = new LuzPosicional(Tupla3f(0,100,0));
    luz1->setId(GL_LIGHT1);
-   luz1->setDifuso(Tupla4f(1,1,1,1));
 
    Material morado(Tupla4f(0.5,0,0.5,1),Tupla4f(0.25,0,0.5,1),Tupla4f(0.1,0.005,0.05,1),128);
    Material azul(Tupla4f(0,0,1,1),Tupla4f(0.05,0,0.7,1),Tupla4f(0.05,0.005,0.5,1),128);
@@ -143,6 +142,12 @@ void Escena::dibujar()
          carrusel->draw(colores,inmediato,visAjedrez,visIluminacion);
       glPopMatrix();
       glPushMatrix();
+         glTranslatef(200,55,0);
+         glRotatef(90,0,1,0);
+         cuadro->asignarTextura("./img/carrusel.jpg");
+         cuadro->draw(colores,inmediato,visAjedrez,visIluminacion);
+      glPopMatrix();
+      glPushMatrix();
          glTranslatef(0,0,-300);
          glPushMatrix();
             glTranslatef(100,50,0);
@@ -181,6 +186,12 @@ void Escena::dibujar()
          carrusel->draw(colores,inmediato,visAjedrez,visIluminacion);
       glPopMatrix();
       glPushMatrix();
+         glTranslatef(200,55,0);
+         glRotatef(90,0,1,0);
+         cuadro->asignarTextura("./img/carrusel.jpg");
+         cuadro->draw(colores,inmediato,visAjedrez,visIluminacion);
+      glPopMatrix();
+      glPushMatrix();
          glTranslatef(0,0,-300);
          glPushMatrix();
             glTranslatef(100,50,0);
@@ -216,6 +227,12 @@ void Escena::dibujar()
 
       glPushMatrix();
          carrusel->draw(colores,inmediato,visAjedrez,visIluminacion);
+      glPopMatrix();
+      glPushMatrix();
+         glTranslatef(200,55,0);
+         glRotatef(90,0,1,0);
+         cuadro->asignarTextura("./img/carrusel.jpg");
+         cuadro->draw(colores,inmediato,visAjedrez,visIluminacion);
       glPopMatrix();
       glPushMatrix();
          glTranslatef(0,0,-300);

@@ -44,6 +44,8 @@ Columpio::Columpio(bool arriba)
 
     caballo = new Caballo();
     cilindro = new Cilindro(110,1.5,30);
+    luz = new LuzPosicional(Tupla3f(0,110,0));
+    luz->setId(GL_LIGHT2);
 
     Material madera(Tupla4f(0.85,0.45,0,1),Tupla4f(0.3,0.1,0,1),Tupla4f(0.85,0.3,0,1),40);
     Material hierro(Tupla4f(0.5,0.5,0.5,1),Tupla4f(0.9,0.9,0.9,1),Tupla4f(0.9,0.9,0.9,1),128);
@@ -67,6 +69,9 @@ void Columpio::cambiarAltura(float incremento)
 
 void Columpio::draw(const vector<Tupla3f> & colores, bool inmediato, bool visAjedrez, bool iluminacion)
 {
+    // glEnable(GL_LIGHT2);
+    luz->activar();
+
     glPushMatrix();
         glTranslatef(0,10*2.23+altura,0);
         glRotatef(-90,1,0,0);

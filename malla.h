@@ -12,6 +12,7 @@
 
 #include "aux.h"
 #include "material.h"
+#include "textura.h"
 
 // *****************************************************************************
 //
@@ -41,6 +42,8 @@ class Malla3D
    inline vector<Tupla3f> get_v() { return v; };
    inline vector<Tupla3i> get_f() { return f; };
 
+   void asignarTextura(string archivo);
+
    protected:
 
 
@@ -49,6 +52,7 @@ class Malla3D
    GLuint id_vbo_tri = 0;
    GLuint id_vbo_col = 0;
    GLuint id_vbo_nor = 0;
+   GLuint id_vbo_tex = 0;
 
    std::vector<Tupla3f> v ;   // tabla de coordenadas de vértices (una tupla por vértice, con tres floats)
    std::vector<Tupla3i> f ; // una terna de 3 enteros por cada cara o triángulo
@@ -56,8 +60,10 @@ class Malla3D
    // completar: tabla de colores, tabla de normales de vértices
    std::vector<Tupla3f> c;
    std::vector<Tupla3f> nv;
+   vector<Tupla2f> ct;
 
    Material m;
+   Textura *textura = nullptr;
 } ;
 
 

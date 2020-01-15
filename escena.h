@@ -15,6 +15,7 @@
 #include "luzPosicional.h"
 #include "luzDireccional.h"
 #include "carrusel.h"
+#include "cuadro.h"
 
 typedef enum {NADA, SELOBJETO,SELVISUALIZACION,SELDIBUJADO} menu;
 typedef enum {INMEDIATO, DIFERIDO} menuDibujado;
@@ -74,6 +75,7 @@ class Escena
    Carrusel * carrusel = nullptr;
    LuzDireccional * luz0 = nullptr;
    LuzPosicional * luz1 = nullptr;
+   Cuadro * cuadro = nullptr;
 
     float velocidadRotacion, velocidadCaballo, velocidadSubebaja;
    

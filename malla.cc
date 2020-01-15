@@ -22,6 +22,11 @@ void Malla3D::draw_ModoInmediato()
       glEnableClientState(GL_NORMAL_ARRAY);
       glNormalPointer(GL_FLOAT, 0, nv.data() );
    }
+   if(!ct.empty())
+   {
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+      glTexCoordPointer(2, GL_FLOAT, 0, ct.data() );
+   }
 	glDrawElements( GL_TRIANGLES, f.size()*3, GL_UNSIGNED_INT, f.data());
    glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -49,6 +54,7 @@ void Malla3D::draw_ModoDiferido()
       id_vbo_tri = crearVBO(GL_ELEMENT_ARRAY_BUFFER, 3*f.size()*sizeof(GL_FLOAT), f.data());
    }
       id_vbo_col = crearVBO(GL_ARRAY_BUFFER, 3*c.size()*sizeof(GL_FLOAT), c.data());
+      id_vbo_tex = crearVBO(GL_ARRAY_BUFFER, 3*ct.size()*sizeof(GL_FLOAT), ct.data());
 
    glBindBuffer(GL_ARRAY_BUFFER, id_vbo_ver);
    glVertexPointer(3, GL_FLOAT, 0, 0);
@@ -66,6 +72,14 @@ void Malla3D::draw_ModoDiferido()
       glNormalPointer(GL_FLOAT, 0, 0 );
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glEnableClientState(GL_NORMAL_ARRAY);
+   }
+
+   if(!ct.empty())
+   {
+      glBindBuffer(GL_ARRAY_BUFFER, id_vbo_tex);
+      glTexCoordPointer(2, GL_FLOAT, 0, 0 );
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+      glEnableClientState(GL_TEXTURE_COORD_ARRAY);
    }
 
    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id_vbo_tri);
@@ -150,4 +164,10 @@ void Malla3D::calcular_normales()
    
    for(int i = 0; i < nv.size(); i++)
       nv[i] = nv[i].normalized();
+}
+
+void Malla3D::asignarTextura(string archivo)
+{
+   this->textura = new Textura(archivo);
+   this->textura->activar();
 }

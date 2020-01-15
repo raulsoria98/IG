@@ -5,6 +5,7 @@
 #include "malla.h"
 #include "caballo.h"
 #include "cilindro.h"
+#include "luzPosicional.h"
 
 class Columpio
 {
@@ -16,6 +17,7 @@ public:
 protected:
     Caballo *caballo = nullptr;
     Cilindro *cilindro = nullptr;
+    LuzPosicional * luz = nullptr;
     float altura;
     bool estaSubiendo;
 };
